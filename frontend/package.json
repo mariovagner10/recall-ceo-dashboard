@@ -1,33 +1,27 @@
 {
-  "type": "module",
   "name": "frontend",
   "version": "1.0.0",
-  "private": true,
-  "description": "Painel CEO Recall Dashboard",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "Mario Braga",
-  "license": "ISC",
   "dependencies": {
-    "@vitejs/plugin-react": "^4.7.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.23.24",
-    "lucide-react": "^0.552.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "recharts": "^3.3.0",
-    "tailwind-variants": "^3.1.1",
-    "vite": "^6.4.1"
+    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/theme-utils": "^2.0.21",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "axios": "^1.7.4",
+    "framer-motion": "^11.18.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-feather": "^2.0.10",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^2.10.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.17"
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^6.4.1"
   }
 }

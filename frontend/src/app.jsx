@@ -1,14 +1,23 @@
-import React, { useState } from "react";
-import CeoDashboard from "./pages/CeoDashboard";
-import Login from "./pages/login";
-import "./styles/globals.css";
+import { ChakraProvider, Box } from "@chakra-ui/react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import theme from "./styles/theme";
+import LoginForm from "./components/LoginForm";
+import Dashboard from "./components/Dashboard";
 
-export default function App() {
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
-
-  return loggedIn ? (
-    <CeoDashboard />
-  ) : (
-    <Login onLogin={() => setLoggedIn(true)} />
+function App() {
+  return (
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Box bg="gray.900" minH="100vh" color="gray.100">
+          <Routes>
+            <Route path="/" element={<LoginForm />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Box>
+      </BrowserRouter>
+    </ChakraProvider>
   );
 }
+
+export default App;
