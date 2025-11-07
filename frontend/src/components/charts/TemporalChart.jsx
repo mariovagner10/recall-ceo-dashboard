@@ -1,16 +1,22 @@
 import {
-  LineChart,
-  Line,
+  ComposedChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
+  CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
 
 export default function TemporalChart({ data }) {
+  // Apenas esta função é alterada para garantir o formato dia/mês/ano
   const formatDate = (iso) =>
-    new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+    new Date(iso).toLocaleDateString("pt-BR", { 
+      day: "2-digit", 
+      month: "2-digit", 
+      year: "numeric" // Adiciona o ano completo (e.g., 2025)
+    });
 
   const formattedData = data.map((item) => ({
     dia: formatDate(item.dia),
@@ -19,46 +25,62 @@ export default function TemporalChart({ data }) {
     "Com CNPJ": item.com_cnpj,
   }));
 
+  // Cores personalizadas inspiradas na imagem e no seu tema
+  const barColor1 = "#3498db"; // Azul
+  const barColor2 = "#2ecc71"; // Verde-água
+  const barColor3 = "#e74c3c"; // Vermelho Suave
+
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <LineChart
+      <ComposedChart
         data={formattedData}
         margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
       >
-        <XAxis dataKey="dia" stroke="#9e9e9e" />
-        <YAxis stroke="#9e9e9e" />
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
+
+        {/* O eixo X agora exibirá dia/mês/ano completo */}
+        <XAxis 
+          dataKey="dia" 
+          stroke="#555555"
+          tick={{ fill: "#555555" }}
+        />
+        <YAxis 
+          stroke="#555555"
+          tick={{ fill: "#555555" }}
+        />
+
         <Tooltip
           contentStyle={{
-            backgroundColor: "#1a1c23",
-            border: "1px solid #333",
+            backgroundColor: "#2a2a2a",
+            border: "1px solid #444",
             borderRadius: "6px",
+            color: "#fff",
           }}
         />
-        <Legend wrapperStyle={{ color: "#fff", paddingTop: "10px" }} />
+        <Legend wrapperStyle={{ color: "#ffffff", paddingTop: "10px" }} />
 
-        {/* Linhas mais grossas e mais vivas */}
-        <Line
-          type="monotone"
-          dataKey="Sem Documento"
-          stroke="#ff4d4f"
-          strokeWidth={4} // <<-- MAIS GROSSA
-          dot={false}
-        />
-        <Line
-          type="monotone"
+        {/* 1. BARRA: Com CPF (Azul) */}
+        <Bar
           dataKey="Com CPF"
-          stroke="#1677ff"
-          strokeWidth={4}
-          dot={false}
+          fill={barColor1}
+          barSize={20}
         />
-        <Line
-          type="monotone"
+        
+        {/* 2. BARRA: Com CNPJ (Verde-água) */}
+        <Bar
           dataKey="Com CNPJ"
-          stroke="#52c41a"
-          strokeWidth={4}
-          dot={false}
+          fill={barColor2}
+          barSize={20}
         />
-      </LineChart>
+        
+        {/* 3. BARRA: Sem Documento (Vermelho) */}
+        <Bar
+          dataKey="Sem Documento"
+          fill={barColor3}
+          barSize={20}
+        />
+        
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }
