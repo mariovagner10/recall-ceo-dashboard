@@ -9,26 +9,38 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+// Nota: Não é possível usar os tokens do Chakra UI (como theme.colors.graph.blue)
+// diretamente no Recharts sem um Hook ou wrapper. Vamos usar as strings literais 
+// dos tokens (ou os props de cor do Chakra) para maior compatibilidade.
+
+// As strings das cores do tema Escuro (para referência):
+// Fundo do Card: #154e48
+// Eixos/Texto: Deve ser claro (e.g., gray.400 ou #bbbbbb)
+
 export default function TemporalChart({ data }) {
-  // Apenas esta função é alterada para garantir o formato dia/mês/ano
+  // Mantemos a formatação completa da data
   const formatDate = (iso) =>
     new Date(iso).toLocaleDateString("pt-BR", { 
       day: "2-digit", 
       month: "2-digit", 
-      year: "numeric" // Adiciona o ano completo (e.g., 2025)
+      year: "numeric"
     });
 
   const formattedData = data.map((item) => ({
-    dia: formatDate(item.dia),
+    dia: item.dia ? formatDate(item.dia) : 'N/A',
     "Sem Documento": item.sem_doc,
     "Com CPF": item.com_cpf,
     "Com CNPJ": item.com_cnpj,
   }));
 
-  // Cores personalizadas inspiradas na imagem e no seu tema
-  const barColor1 = "#3498db"; // Azul
-  const barColor2 = "#2ecc71"; // Verde-água
-  const barColor3 = "#e74c3c"; // Vermelho Suave
+  // Usando os HEX's definidos no theme.js (ou muito próximos)
+  const barColor1 = "#3498db"; // graph.blue
+  const barColor2 = "#00c49f"; // graph.aqua (ajustado para a cor do exemplo)
+  const barColor3 = "#e74c3c"; // graph.dangerBar
+
+  // Cores claras para os eixos (para aparecerem no fundo escuro)
+  const axisColor = "#cccccc"; // Cinza claro
+  const gridColor = "rgba(255, 255, 255, 0.2)"; // Linhas de grid bem suaves
 
   return (
     <ResponsiveContainer width="100%" height={350}>
@@ -36,28 +48,36 @@ export default function TemporalChart({ data }) {
         data={formattedData}
         margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
       >
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
+        {/* CORRIGIDO: Grid claro e sutil */}
+        <CartesianGrid 
+          strokeDasharray="3 3" 
+          vertical={false} 
+          stroke={gridColor} 
+        />
 
-        {/* O eixo X agora exibirá dia/mês/ano completo */}
+        {/* CORRIGIDO: Eixo X e rótulos CLAROS */}
         <XAxis 
           dataKey="dia" 
-          stroke="#555555"
-          tick={{ fill: "#555555" }}
+          stroke={axisColor}
+          tick={{ fill: axisColor, fontSize: 12 }} // Cor do texto do eixo em claro
         />
+        
+        {/* CORRIGIDO: Eixo Y e rótulos CLAROS */}
         <YAxis 
-          stroke="#555555"
-          tick={{ fill: "#555555" }}
+          stroke={axisColor}
+          tick={{ fill: axisColor, fontSize: 12 }} // Cor do texto do eixo em claro
         />
 
         <Tooltip
           contentStyle={{
-            backgroundColor: "#2a2a2a",
+            backgroundColor: "#2a2a2a", // Mantemos o tooltip escuro com contraste
             border: "1px solid #444",
             borderRadius: "6px",
             color: "#fff",
           }}
         />
-        <Legend wrapperStyle={{ color: "#ffffff", paddingTop: "10px" }} />
+        {/* CORRIGIDO: Legenda em cor clara */}
+        <Legend wrapperStyle={{ color: axisColor, paddingTop: "10px" }} />
 
         {/* 1. BARRA: Com CPF (Azul) */}
         <Bar
